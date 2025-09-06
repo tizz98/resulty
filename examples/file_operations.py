@@ -9,14 +9,13 @@ This example shows how to handle common file operation failures:
 - Concurrent access conflicts
 """
 
-import json
 import csv
+import json
 import os
-import tempfile
-from typing import Dict, List, Any
-from pathlib import Path
-
 import sys
+import tempfile
+from pathlib import Path
+from typing import Any, Dict, List
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 

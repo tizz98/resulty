@@ -1,15 +1,13 @@
+import inspect
+import typing as t
 from dataclasses import dataclass
 from functools import wraps
-import typing as t
-import inspect
-from typing import TypeVar, ParamSpec, Callable, Awaitable, overload
-
 
 __all__ = ["resulty", "ResultyException", "Result", "Ok", "Err"]
 
 
-T = TypeVar("T")
-P = ParamSpec("P")
+T = t.TypeVar("T")
+P = t.ParamSpec("P")
 
 
 class ResultyException(Exception):
@@ -99,12 +97,12 @@ Result = t.Union[Ok[T], Err]
 """Type alias for a result that can be either Ok[T] or Err."""
 
 
-@overload
-def resulty(fn: Callable[P, T]) -> Callable[P, Result[T]]: ...
+@t.overload
+def resulty(fn: t.Callable[P, T]) -> t.Callable[P, Result[T]]: ...
 
 
-@overload
-def resulty(fn: Callable[P, Awaitable[T]]) -> Callable[P, Awaitable[Result[T]]]: ...
+@t.overload
+def resulty(fn: t.Callable[P, t.Awaitable[T]]) -> t.Callable[P, t.Awaitable[Result[T]]]: ...
 
 
 def resulty(fn):

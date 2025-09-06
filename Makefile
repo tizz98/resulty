@@ -1,4 +1,4 @@
-.PHONY: test test-cov test-doctest mypy lint fmt fmt-check check install clean examples help
+.PHONY: test test-cov test-doctest mypy lint fmt fmt-check sort-imports check install clean examples help
 
 # Default target
 help:
@@ -11,6 +11,7 @@ help:
 	@echo "  lint       - Run linting checks"
 	@echo "  fmt        - Format code"
 	@echo "  fmt-check  - Check code formatting"
+	@echo "  sort-imports - Sort imports with ruff"
 	@echo "  check      - Run all checks (lint, mypy, test)"
 	@echo "  examples   - Run example scripts"
 	@echo "  clean      - Clean up temporary files"
@@ -46,6 +47,10 @@ fmt:
 # Check formatting
 fmt-check:
 	poetry run ruff format --check
+
+# Sort imports
+sort-imports:
+	poetry run ruff check --select I --fix
 
 # Run all checks
 check: lint mypy test

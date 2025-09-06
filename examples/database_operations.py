@@ -12,14 +12,13 @@ This example shows how to handle common database operation failures:
 Note: This example uses SQLite for simplicity and doesn't require external dependencies.
 """
 
-import sqlite3
-import tempfile
 import os
-from typing import Dict, List, Any, Optional
+import sqlite3
+import sys
+import tempfile
 from contextlib import contextmanager
 from pathlib import Path
-
-import sys
+from typing import Any, Dict, List, Optional
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
@@ -123,7 +122,8 @@ class UserRepository:
             with self._get_connection() as conn:
                 cursor = conn.execute(
                     """
-                    INSERT INTO users (email, first_name, last_name, age, department, salary)
+                    INSERT INTO users (email, first_name, last_name, age,
+                                     department, salary)
                     VALUES (?, ?, ?, ?, ?, ?)
                 """,
                     (
@@ -208,7 +208,8 @@ class UserRepository:
             with self._get_connection() as conn:
                 if department:
                     cursor = conn.execute(
-                        "SELECT * FROM users WHERE department = ? ORDER BY created_at DESC LIMIT ?",
+                        """SELECT * FROM users WHERE department = ?
+                           ORDER BY created_at DESC LIMIT ?""",
                         (department, limit),
                     )
                 else:

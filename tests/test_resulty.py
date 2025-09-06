@@ -1,5 +1,6 @@
-import resulty
 import pytest
+
+import resulty
 
 
 def resulty_factory(value=None, exception=None):

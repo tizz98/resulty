@@ -9,13 +9,12 @@ This example shows how to handle validation failures:
 - Business rule validation
 """
 
-import re
-from datetime import datetime, date
-from typing import Dict, Any, Optional
-from dataclasses import dataclass
-
-import sys
 import os
+import re
+import sys
+from dataclasses import dataclass
+from datetime import date, datetime
+from typing import Any, Dict, Optional
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 

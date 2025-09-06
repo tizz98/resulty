@@ -10,13 +10,12 @@ This example shows how to handle various API failure scenarios:
 """
 
 import json
-from typing import Dict, Any, Optional
-from urllib.request import urlopen
+import os
+import sys
+from typing import Any, Dict, Optional
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
-
-import sys
-import os
+from urllib.request import urlopen
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
