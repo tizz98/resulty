@@ -1,11 +1,12 @@
-.PHONY: test test-cov mypy lint fmt fmt-check check install clean examples help
+.PHONY: test test-cov test-doctest mypy lint fmt fmt-check check install clean examples help
 
 # Default target
 help:
 	@echo "Available targets:"
 	@echo "  install    - Install dependencies with poetry"
-	@echo "  test       - Run tests with pytest"
+	@echo "  test       - Run tests with pytest (includes doctests)"
 	@echo "  test-cov   - Run tests with coverage report"
+	@echo "  test-doctest - Run only doctests"
 	@echo "  mypy       - Run type checking"
 	@echo "  lint       - Run linting checks"
 	@echo "  fmt        - Format code"
@@ -25,6 +26,10 @@ test:
 # Run tests with coverage
 test-cov:
 	poetry run pytest --cov=resulty --cov-report=term-missing
+
+# Run only doctests
+test-doctest:
+	poetry run pytest --doctest-modules resulty/
 
 # Type checking
 mypy:

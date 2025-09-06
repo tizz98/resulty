@@ -222,3 +222,126 @@ class TestAsyncioResulty:
             case resulty.Err(exc):
                 assert isinstance(exc, CustomResultyException)
                 assert str(exc) == "Division by zero"
+
+
+class TestResultMixin:
+    """Test the Rust-like methods provided by ResultMixin"""
+    
+    def test_is_ok_with_ok_result(self):
+        result = resulty.Ok("success")
+        assert result.is_ok() is True
+        assert result.is_err() is False
+    
+    def test_is_ok_with_err_result(self):
+        result = resulty.Err(CustomResultyException("error"))
+        assert result.is_ok() is False
+        assert result.is_err() is True
+    
+    def test_is_err_with_ok_result(self):
+        result = resulty.Ok(42)
+        assert result.is_err() is False
+        assert result.is_ok() is True
+    
+    def test_is_err_with_err_result(self):
+        result = resulty.Err(CustomResultyException("failure"))
+        assert result.is_err() is True
+        assert result.is_ok() is False
+    
+    def test_unwrap_ok_result(self):
+        expected_value = "test_value"
+        result = resulty.Ok(expected_value)
+        
+        # unwrap() should return the value for Ok
+        assert result.unwrap() is expected_value
+    
+    def test_unwrap_err_result(self):
+        expected_exc = CustomResultyException("test error")
+        result = resulty.Err(expected_exc)
+        
+        # unwrap() should raise the exception for Err
+        with pytest.raises(CustomResultyException) as exc_info:
+            result.unwrap()
+        
+        assert exc_info.value is expected_exc
+    
+    def test_unwrap_with_different_value_types(self):
+        # Test with various value types
+        test_cases = [
+            42,
+            "string",
+            [1, 2, 3],
+            {"key": "value"},
+            None,
+            True,
+            False,
+        ]
+        
+        for expected_value in test_cases:
+            result = resulty.Ok(expected_value)
+            assert result.unwrap() == expected_value
+    
+    def test_unwrap_with_different_exception_types(self):
+        # Test with different ResultyException subclasses
+        class CustomError1(resulty.ResultyException):
+            pass
+        
+        class CustomError2(resulty.ResultyException):
+            pass
+        
+        error1 = CustomError1("error 1")
+        error2 = CustomError2("error 2")
+        
+        result1 = resulty.Err(error1)
+        result2 = resulty.Err(error2)
+        
+        with pytest.raises(CustomError1) as exc_info1:
+            result1.unwrap()
+        assert exc_info1.value is error1
+        
+        with pytest.raises(CustomError2) as exc_info2:
+            result2.unwrap()
+        assert exc_info2.value is error2
+    
+    def test_chaining_result_methods(self):
+        # Test that methods can be used together logically
+        ok_result = resulty.Ok("success")
+        err_result = resulty.Err(CustomResultyException("failure"))
+        
+        # Check Ok result
+        if ok_result.is_ok():
+            value = ok_result.unwrap()
+            assert value == "success"
+        else:
+            assert False, "Should be Ok"
+        
+        # Check Err result
+        if err_result.is_err():
+            with pytest.raises(CustomResultyException):
+                err_result.unwrap()
+        else:
+            assert False, "Should be Err"
+    
+    def test_result_methods_with_resulty_decorator(self):
+        # Test that ResultMixin methods work with decorator-created results
+        @resulty.resulty
+        def successful_function():
+            return "decorator_success"
+        
+        @resulty.resulty
+        def failing_function():
+            raise CustomResultyException("decorator_error")
+        
+        ok_result = successful_function()
+        err_result = failing_function()
+        
+        # Test Ok result from decorator
+        assert ok_result.is_ok()
+        assert not ok_result.is_err()
+        assert ok_result.unwrap() == "decorator_success"
+        
+        # Test Err result from decorator
+        assert err_result.is_err()
+        assert not err_result.is_ok()
+        with pytest.raises(CustomResultyException) as exc_info:
+            err_result.unwrap()
+        assert str(exc_info.value) == "decorator_error"

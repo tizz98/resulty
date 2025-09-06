@@ -40,6 +40,11 @@ skip_covered = false
 [tool.coverage.html]
 directory = "htmlcov"
 
+[tool.pytest.ini_options]
+addopts = "--doctest-modules"
+testpaths = ["tests", "resulty"]
+doctest_optionflags = ["NORMALIZE_WHITESPACE", "IGNORE_EXCEPTION_DETAIL"]
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
