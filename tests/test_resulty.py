@@ -37,7 +37,7 @@ class TestSyncResulty:
     def test_error(self):
         given_exc = CustomResultyException()
 
-        match resulty_factory(exception=given_exc):
+        match resulty_factory(exception=given_exc)():
             case resulty.Ok(_):
                 assert False, "expected error"
             case resulty.Err(got_exc):
@@ -46,7 +46,7 @@ class TestSyncResulty:
     def test_ok(self):
         given_val = object()
 
-        match resulty_factory(value=given_val):
+        match resulty_factory(value=given_val)():
             case resulty.Ok(got_val):
                 assert got_val is given_val, "expected matching value"
             case resulty.Err(_):
@@ -56,7 +56,7 @@ class TestSyncResulty:
         given_exc = CustomException()
 
         try:
-            match resulty_factory(exception=given_exc):
+            match resulty_factory(exception=given_exc)():
                 case resulty.Ok(_):
                     assert False, "expected error"
                 case resulty.Err(_):
