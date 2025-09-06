@@ -54,6 +54,15 @@ jobs:
     - name: Run tests with coverage
       run: poetry run pytest --cov=resulty --cov-report=xml --cov-report=html --cov-report=term-missing
 
+    - name: Run examples
+      run: |
+        echo "Running examples to verify they work correctly..."
+        python examples/api_client.py
+        python examples/file_operations.py  
+        python examples/data_validation.py
+        python examples/database_operations.py
+        echo "All examples completed successfully!"
+
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
       with:
